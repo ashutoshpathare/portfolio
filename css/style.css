@@ -1,0 +1,491 @@
+/* ============================================================
+   PORTFOLIO – style.css
+   Structure:
+   1. CSS Reset
+   2. Design Tokens (CSS variables)
+   3. Base / Typography
+   4. Utilities
+   5. Navbar
+   6. Hero Section
+   7. Placeholder Sections
+   8. Responsive (tablet & mobile)
+   ============================================================ */
+
+
+/* ============================================================
+   1. CSS RESET
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  /* Smooth scroll for anchor links */
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+/* ============================================================
+   2. DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* Colors */
+  --color-bg:       #0a0a0a;   /* page background  */
+  --color-surface:  #141414;   /* cards / navbar   */
+  --color-text:     #f2f2f2;   /* primary text     */
+  --color-muted:    #8a8a8a;   /* secondary / muted text */
+  --color-accent:   #e8e8e8;   /* off-white accent */
+  --color-border:   #1f1f1f;   /* subtle borders   */
+
+  /* Typography */
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
+  --font-body:    "Inter", system-ui, sans-serif;
+
+  /* Sizing */
+  --max-width:    1100px;
+  --nav-height:   64px;
+
+  /* Spacing scale */
+  --space-xs:  0.5rem;
+  --space-sm:  1rem;
+  --space-md:  1.5rem;
+  --space-lg:  2.5rem;
+  --space-xl:  4rem;
+  --space-2xl: 6rem;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-med:  300ms ease;
+}
+
+
+/* ============================================================
+   3. BASE / TYPOGRAPHY
+   ============================================================ */
+html {
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+
+/* ============================================================
+   4. UTILITIES
+   ============================================================ */
+
+/* Inner wrapper – constrains content to max width */
+.inner-wrap {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}
+
+/* Button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.75rem 1.75rem;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast),
+              opacity var(--transition-fast);
+  white-space: nowrap;
+}
+
+/* Filled / primary button */
+.btn--primary {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border: 1.5px solid var(--color-accent);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+}
+
+/* Outline / ghost button */
+.btn--outline {
+  background-color: transparent;
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border);
+}
+
+.btn--outline:hover {
+  border-color: var(--color-muted);
+  color: var(--color-accent);
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ============================================================
+   5. NAVBAR
+   ============================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--nav-height);
+  background-color: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-med);
+}
+
+/* Solid background once user scrolls */
+.navbar.scrolled {
+  background-color: var(--color-surface);
+}
+
+.navbar__inner {
+  max-width: var(--max-width);
+  height: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.navbar__logo {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  transition: color var(--transition-fast);
+}
+
+.navbar__logo:hover {
+  color: var(--color-muted);
+}
+
+/* Nav links (desktop) */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  transition: color var(--transition-fast);
+  position: relative;
+}
+
+/* Underline hover effect */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-text);
+  transition: width var(--transition-med);
+}
+
+.nav-link:hover {
+  color: var(--color-text);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Hamburger (hidden on desktop) */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: transform var(--transition-med),
+              opacity var(--transition-med),
+              width var(--transition-med);
+  transform-origin: center;
+}
+
+/* "X" state when menu is open */
+.navbar__hamburger[aria-expanded="true"] .bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar__hamburger[aria-expanded="true"] .bar:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+
+.navbar__hamburger[aria-expanded="true"] .bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* ============================================================
+   6. HERO SECTION
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--nav-height); /* offset for fixed navbar */
+  padding-inline: var(--space-md);
+}
+
+.hero__inner {
+  max-width: var(--max-width);
+  width: 100%;
+  /* Stagger the children with CSS animation-delay */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Each hero child animates in */
+.hero__label,
+.hero__heading,
+.hero__tagline,
+.hero__cta {
+  opacity: 0;
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.hero__label   { animation-delay: 0.1s; }
+.hero__heading { animation-delay: 0.25s; }
+.hero__tagline { animation-delay: 0.4s; }
+.hero__cta     { animation-delay: 0.55s; }
+
+/* Small label */
+.hero__label {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Big heading */
+.hero__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+/* Tagline */
+.hero__tagline {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--color-muted);
+  max-width: 520px;
+  line-height: 1.65;
+}
+
+/* <br> only shows on wider screens */
+.br-desktop {
+  display: none;
+}
+
+/* CTA row */
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+
+/* ============================================================
+   7. PLACEHOLDER SECTIONS
+   ============================================================ */
+.section {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+}
+
+.section__inner {
+  max-width: var(--max-width);
+  width: 100%;
+  margin-inline: auto;
+  padding: var(--space-2xl) var(--space-md);
+}
+
+.section__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+
+/* ============================================================
+   8. RESPONSIVE
+   ============================================================ */
+
+/* ---------- Tablet (≤ 768px) ---------- */
+@media (max-width: 768px) {
+
+  /* Show hamburger, hide desktop nav */
+  .navbar__hamburger {
+    display: flex;
+  }
+
+  /* Mobile nav panel – slides in from top */
+  .navbar__nav {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-md);
+
+    /* Hidden state */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-med),
+                padding var(--transition-med);
+  }
+
+  /* Open state – toggled by JS adding .is-open */
+  .navbar__nav.is-open {
+    max-height: 320px;
+    padding: var(--space-md);
+  }
+
+  .navbar__links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .nav-link {
+    font-size: 1rem;
+  }
+
+  /* Hero adjustments */
+  .hero {
+    align-items: flex-start;
+    padding-top: calc(var(--nav-height) + var(--space-xl));
+  }
+}
+
+/* ---------- Small mobile (≤ 480px) ---------- */
+@media (max-width: 480px) {
+  .hero__cta {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ---------- Large screens: show <br> ---------- */
+@media (min-width: 640px) {
+  .br-desktop {
+    display: inline;
+  }
+}
