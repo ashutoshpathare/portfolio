@@ -7,8 +7,11 @@
    4. Utilities
    5. Navbar
    6. Hero Section
-   7. Placeholder Sections
-   8. Responsive (tablet & mobile)
+   7. Shared Section Styles
+   8. About Section
+   9. Skills Section
+  10. Scroll-Reveal Animation
+  11. Responsive (tablet & mobile)
    ============================================================ */
 
 
@@ -326,12 +329,13 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   padding-top: var(--nav-height); /* offset for fixed navbar */
-  padding-inline: var(--space-md);
 }
 
 .hero__inner {
   max-width: var(--max-width);
   width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-md); /* same padding as .navbar__inner */
   /* Stagger the children with CSS animation-delay */
   display: flex;
   flex-direction: column;
@@ -396,7 +400,7 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /* ============================================================
-   7. PLACEHOLDER SECTIONS
+   7. SHARED SECTION STYLES
    ============================================================ */
 .section {
   min-height: 60vh;
@@ -412,15 +416,187 @@ h1, h2, h3, h4, h5, h6 {
   padding: var(--space-2xl) var(--space-md);
 }
 
+/* Small uppercase label above heading */
+.section__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: var(--space-xs);
+}
+
 .section__title {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 700;
   color: var(--color-text);
+  margin-bottom: var(--space-lg);
 }
 
 
 /* ============================================================
-   8. RESPONSIVE
+   8. ABOUT SECTION
+   ============================================================ */
+
+/* Two-column grid: text left, photo right */
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+/* Left: body copy */
+.about__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.about__text p {
+  font-size: 1.0625rem;
+  color: var(--color-muted);
+  line-height: 1.8;
+  max-width: 56ch;
+}
+
+.about__text strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Right: portrait placeholder box */
+.about__photo {
+  aspect-ratio: 4 / 5;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Subtle grayscale noise feel */
+  filter: grayscale(1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Diagonal grain overlay */
+.about__photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.015) 2px,
+    rgba(255, 255, 255, 0.015) 4px
+  );
+  pointer-events: none;
+}
+
+.about__photo-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+
+/* ============================================================
+   9. SKILLS SECTION
+   ============================================================ */
+
+/* Three-column card grid */
+.skills__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+/* Individual skill card */
+.skill-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: var(--space-lg) var(--space-md);
+  transition: transform var(--transition-med),
+              border-color var(--transition-med);
+}
+
+.skill-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-muted);
+}
+
+.skill-card__title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+  letter-spacing: -0.01em;
+}
+
+/* Pill tags container */
+.skill-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* Individual pill tag */
+.tag {
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 100px;
+  padding: 0.25rem 0.75rem;
+  line-height: 1.5;
+  transition: color var(--transition-fast),
+              border-color var(--transition-fast);
+}
+
+.skill-card:hover .tag {
+  color: var(--color-accent);
+  border-color: #2a2a2a;
+}
+
+
+/* ============================================================
+  10. SCROLL-REVEAL ANIMATION
+   ============================================================ */
+
+/* Initial hidden state – set before JS fires */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+/* JS adds this class when element enters viewport */
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* ============================================================
+  11. RESPONSIVE
    ============================================================ */
 
 /* ---------- Tablet (≤ 768px) ---------- */
@@ -468,6 +644,22 @@ h1, h2, h3, h4, h5, h6 {
   .hero {
     align-items: flex-start;
     padding-top: calc(var(--nav-height) + var(--space-xl));
+  }
+
+  /* About: single column */
+  .about__grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Photo moves below text on mobile */
+  .about__photo {
+    aspect-ratio: 4 / 3;
+    max-width: 400px;
+  }
+
+  /* Skills: single column */
+  .skills__grid {
+    grid-template-columns: 1fr;
   }
 }
 
