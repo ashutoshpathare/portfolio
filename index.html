@@ -254,11 +254,68 @@
       </div>
     </section>
 
-    <!-- Gallery -->
-    <section class="section" id="gallery">
+    <!-- ===== GALLERY ===== -->
+    <section class="section reveal" id="gallery">
       <div class="section__inner">
-        <h2 class="section__title">Gallery</h2>
+
+        <!-- Section header -->
+        <p class="section__label">GALLERY</p>
+        <h2 class="section__title">Through my lens</h2>
+        <p class="gallery__subtitle">Shot on my smartphone. Seen in black and white.</p>
+
+        <!-- Masonry grid: 3 cols desktop → 2 tablet → 1 mobile -->
+        <div class="gallery-grid" id="galleryGrid">
+
+          <div class="gallery-item" data-index="0" role="button" tabindex="0" aria-label="Photograph 1 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-01.webp" alt="Photograph 1" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-01.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+          <div class="gallery-item" data-index="1" role="button" tabindex="0" aria-label="Photograph 2 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-02.webp" alt="Photograph 2" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-02.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+          <div class="gallery-item" data-index="2" role="button" tabindex="0" aria-label="Photograph 3 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-03.webp" alt="Photograph 3" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-03.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+          <div class="gallery-item" data-index="3" role="button" tabindex="0" aria-label="Photograph 4 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-04.webp" alt="Photograph 4" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-04.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+          <div class="gallery-item" data-index="4" role="button" tabindex="0" aria-label="Photograph 5 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-05.webp" alt="Photograph 5" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-05.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+          <div class="gallery-item" data-index="5" role="button" tabindex="0" aria-label="Photograph 6 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-06.webp" alt="Photograph 6" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-06.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+          <div class="gallery-item" data-index="6" role="button" tabindex="0" aria-label="Photograph 7 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-07.webp" alt="Photograph 7" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-07.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+          <div class="gallery-item" data-index="7" role="button" tabindex="0" aria-label="Photograph 8 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-08.webp" alt="Photograph 8" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-08.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+          <div class="gallery-item" data-index="8" role="button" tabindex="0" aria-label="Photograph 9 – click to view full size">
+            <img class="gallery-item__bw"    src="assets/photos/photo-09.webp" alt="Photograph 9" loading="lazy" />
+            <img class="gallery-item__color" src="assets/photos/photo-09.webp" alt="" aria-hidden="true" loading="lazy" />
+          </div>
+
+        </div>
       </div>
+
+      <!-- Film grain overlay (covers the whole section) -->
+      <div class="gallery-grain" aria-hidden="true"></div>
     </section>
 
     <!-- Contact -->
@@ -267,6 +324,30 @@
         <h2 class="section__title">Contact</h2>
       </div>
     </section>
+
+    <!-- ===== LIGHTBOX (opened/closed by JS) ===== -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+      <!-- Clickable dark backdrop -->
+      <div class="lightbox__backdrop" id="lightboxBackdrop"></div>
+
+      <!-- Prev / Next -->
+      <button class="lightbox__prev" id="lightboxPrev" aria-label="Previous photo">&#8249;</button>
+      <button class="lightbox__next" id="lightboxNext" aria-label="Next photo">&#8250;</button>
+
+      <!-- Close -->
+      <button class="lightbox__close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+
+      <!-- Photo -->
+      <div class="lightbox__stage">
+        <img class="lightbox__img" id="lightboxImg" src="" alt="" />
+      </div>
+
+      <!-- Counter + color toggle -->
+      <div class="lightbox__toolbar">
+        <span class="lightbox__counter" id="lightboxCounter">01 / 09</span>
+        <button class="lightbox__color-btn" id="lightboxColorBtn">Toggle color</button>
+      </div>
+    </div>
 
     <script src="js/main.js"></script>
   </body>

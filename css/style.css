@@ -805,3 +805,342 @@ h1, h2, h3, h4, h5, h6 {
     display: inline;
   }
 }
+
+
+/* ============================================================
+  GALLERY SECTION
+   ============================================================ */
+
+/* Needed to anchor the absolute grain overlay */
+#gallery {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtitle under the heading */
+.gallery__subtitle {
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+  margin-top: calc(-1 * var(--space-sm));
+  margin-bottom: var(--space-lg);
+  line-height: 1.6;
+}
+
+/* ── Masonry grid (CSS multi-column) ── */
+.gallery-grid {
+  columns: 3;
+  column-gap: 12px;
+}
+
+/* Each item stays whole inside its column */
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  /* Spotlight defaults way offscreen until JS overrides */
+  --x: -500px;
+  --y: -500px;
+}
+
+/* Grayscale base layer — defines the layout height */
+.gallery-item__bw {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1);
+  transition: transform 0.5s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.gallery-item:hover .gallery-item__bw {
+  transform: scale(1.03);
+}
+
+/* Color layer — masked to a ~140px circle following the cursor */
+.gallery-item__color {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: radial-gradient(
+    circle 140px at var(--x) var(--y),
+    black 0%, transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle 140px at var(--x) var(--y),
+    black 0%, transparent 100%
+  );
+}
+
+/* Missing-image placeholder — JS adds .gallery-item--missing on img error */
+.gallery-item--missing {
+  aspect-ratio: 3 / 4;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.gallery-item--missing::after {
+  content: "Image unavailable";
+  font-size: 0.6875rem;
+  color: var(--color-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Keyboard focus ring */
+.gallery-item:focus-visible {
+  outline: 2px solid var(--color-muted);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ── Film grain overlay ── */
+.gallery-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.045;
+  /* SVG feTurbulence noise tile */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  animation: grain 0.15s steps(1) infinite;
+}
+
+@keyframes grain {
+  0%   { transform: translate(  0,    0 ); }
+  14%  { transform: translate(-3px,  2px); }
+  28%  { transform: translate( 2px, -3px); }
+  42%  { transform: translate(-2px, -2px); }
+  57%  { transform: translate( 3px,  1px); }
+  71%  { transform: translate(-1px,  3px); }
+  85%  { transform: translate( 2px, -1px); }
+  100% { transform: translate(  0,    0 ); }
+}
+
+
+/* ============================================================
+  LIGHTBOX
+   ============================================================ */
+
+/* Lock body scroll while lightbox is open */
+body.lightbox-open {
+  overflow: hidden;
+}
+
+/* Full-screen overlay — hidden via opacity+visibility, no display toggle */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Dark clickable backdrop */
+.lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.95);
+  cursor: pointer;
+}
+
+/* Image stage sits above the backdrop */
+.lightbox__stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Lightbox photo — starts scaled-down, zooms in when opened */
+.lightbox__img {
+  max-width: 90vw;
+  max-height: 82vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  filter: grayscale(1);
+  transform: scale(0.88);
+  opacity: 0;
+  transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+}
+
+.lightbox.is-open .lightbox__img {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Color mode */
+.lightbox__img--color {
+  filter: grayscale(0);
+}
+
+/* ── Close button ── */
+.lightbox__close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  color: var(--color-text);
+  font-size: 1.125rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
+}
+
+.lightbox__close:hover,
+.lightbox__close:focus-visible {
+  background: rgba(255, 255, 255, 0.17);
+  outline: none;
+}
+
+/* ── Prev / Next navigation buttons ── */
+.lightbox__prev,
+.lightbox__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  color: var(--color-text);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
+}
+
+.lightbox__prev { left:  var(--space-md); }
+.lightbox__next { right: var(--space-md); }
+
+.lightbox__prev:hover,
+.lightbox__next:hover,
+.lightbox__prev:focus-visible,
+.lightbox__next:focus-visible {
+  background: rgba(255, 255, 255, 0.17);
+  outline: none;
+}
+
+/* ── Bottom toolbar: counter + color toggle ── */
+.lightbox__toolbar {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  background: rgba(10, 10, 10, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  padding: 0.4rem 1.125rem;
+  white-space: nowrap;
+}
+
+.lightbox__counter {
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  padding-right: var(--space-sm);
+}
+
+.lightbox__color-btn {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text);
+  background: none;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 0 0 var(--space-sm);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.lightbox__color-btn:hover {
+  color: var(--color-accent);
+}
+
+
+/* ── Gallery + lightbox responsive ── */
+@media (max-width: 768px) {
+  .gallery-grid {
+    columns: 2;
+  }
+
+  /* Bring nav buttons inward on small screens */
+  .lightbox__prev { left:  var(--space-sm); }
+  .lightbox__next { right: var(--space-sm); }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    columns: 1;
+  }
+}
+
+/* ── prefers-reduced-motion overrides ── */
+@media (prefers-reduced-motion: reduce) {
+  /* Freeze the grain overlay */
+  .gallery-grain {
+    animation: none;
+  }
+
+  /* No scale on image hover */
+  .gallery-item:hover .gallery-item__bw {
+    transform: none;
+  }
+
+  /* Instant lightbox open/close */
+  .lightbox {
+    transition: none;
+  }
+
+  /* Image already at final state — skip the zoom */
+  .lightbox__img {
+    transform: scale(1);
+    opacity: 1;
+    transition: filter 0.01s;
+  }
+}
