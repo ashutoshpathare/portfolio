@@ -733,20 +733,29 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     right: 0;
     background-color: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--space-md);
 
-    /* Hidden state */
+    /* Closed state — fully invisible and inert */
     max-height: 0;
     overflow: hidden;
+    padding: 0;                          /* no gap peeking out */
+    border-bottom: 0px solid transparent; /* collapse border */
+    opacity: 0;
+    visibility: hidden;                  /* also removes from tab order */
+
     transition: max-height var(--transition-med),
-                padding var(--transition-med);
+                padding    var(--transition-med),
+                opacity    var(--transition-med),
+                visibility var(--transition-med),
+                border-color var(--transition-med);
   }
 
   /* Open state – toggled by JS adding .is-open */
   .navbar__nav.is-open {
     max-height: 320px;
     padding: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    opacity: 1;
+    visibility: visible;
   }
 
   .navbar__links {
