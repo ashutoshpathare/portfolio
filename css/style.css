@@ -1270,7 +1270,7 @@ body.lightbox-open {
     justify-content: center;
   }
 
-  /* Social cards wrap naturally; let them go 2-up */
+  /* Social cards: 2 per row; with 3 cards the last one fills row 2 */
   .social-card {
     flex: 1 1 calc(50% - var(--space-xs));
     justify-content: center;
