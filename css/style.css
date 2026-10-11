@@ -1153,3 +1153,126 @@ body.lightbox-open {
     transition: filter 0.01s;
   }
 }
+
+
+/* ============================================================
+  CONTACT SECTION
+   ============================================================ */
+
+/* Subtitle under heading */
+.contact__subtitle {
+  font-size: 1.0625rem;
+  color: var(--color-muted);
+  margin-top: calc(-1 * var(--space-sm));
+  margin-bottom: var(--space-lg);
+  line-height: 1.65;
+  max-width: 48ch;
+}
+
+/* CTA button row */
+.contact__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+/* Social cards row */
+.contact__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Individual social card */
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform var(--transition-med),
+              border-color var(--transition-med),
+              color var(--transition-fast);
+}
+
+.social-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-muted);
+  color: var(--color-text);
+}
+
+/* SVG icon inside the card */
+.social-card__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+/* Card label text */
+.social-card__label {
+  line-height: 1;
+}
+
+
+/* ============================================================
+  SITE FOOTER
+   ============================================================ */
+.site-footer {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-md) 0;
+}
+
+.site-footer__inner {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.site-footer__copy {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.site-footer__top {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.site-footer__top:hover {
+  color: var(--color-text);
+}
+
+
+/* ── Contact + footer responsive ── */
+@media (max-width: 480px) {
+  /* Stack buttons full-width on small mobile */
+  .contact__cta {
+    flex-direction: column;
+  }
+
+  .contact__cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Social cards wrap naturally; let them go 2-up */
+  .social-card {
+    flex: 1 1 calc(50% - var(--space-xs));
+    justify-content: center;
+  }
+}
