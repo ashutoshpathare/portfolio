@@ -836,16 +836,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ── Masonry grid (CSS multi-column) ── */
+/* JS balanced-masonry — JS sets height and positions items */
 .gallery-grid {
-  columns: 3;
-  column-gap: 12px;
+  position: relative;
 }
 
-/* Each item stays whole inside its column */
+/* Each item is absolutely positioned by layoutGallery() */
 .gallery-item {
-  break-inside: avoid;
-  margin-bottom: 12px;
-  position: relative;
+  position: absolute; /* JS overrides this per-item */
   border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
@@ -1112,21 +1110,12 @@ body.lightbox-open {
 }
 
 
-/* ── Gallery + lightbox responsive ── */
-@media (max-width: 768px) {
-  .gallery-grid {
-    columns: 2;
-  }
 
+/* ── Lightbox responsive ── */
+@media (max-width: 768px) {
   /* Bring nav buttons inward on small screens */
   .lightbox__prev { left:  var(--space-sm); }
   .lightbox__next { right: var(--space-sm); }
-}
-
-@media (max-width: 480px) {
-  .gallery-grid {
-    columns: 1;
-  }
 }
 
 /* ── prefers-reduced-motion overrides ── */

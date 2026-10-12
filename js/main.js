@@ -162,6 +162,81 @@
     }
   });
 
+  /* ── Balanced masonry layout ────────────────────────────── */
+  var GAP = 12; // px — matches original CSS column-gap
+
+  function getColCount() {
+    // Mirror the CSS media-query breakpoints exactly
+    var w = window.innerWidth;
+    if (w <= 480) return 1;
+    if (w <= 768) return 2;
+    return 3;
+  }
+
+  function layoutGallery() {
+    var grid = document.getElementById("galleryGrid");
+    if (!grid) return;
+
+    var gridWidth = grid.offsetWidth;
+    if (gridWidth === 0) return; // not yet rendered
+
+    var cols     = getColCount();
+    var colWidth = (gridWidth - GAP * (cols - 1)) / cols;
+
+    // Track how tall each column has grown
+    var colHeights = [];
+    for (var c = 0; c < cols; c++) { colHeights.push(0); }
+
+    // Work through items in data-index order so lightbox mapping is preserved
+    var items = Array.from(grid.querySelectorAll(".gallery-item"));
+    items.sort(function (a, b) {
+      return parseInt(a.dataset.index, 10) - parseInt(b.dataset.index, 10);
+    });
+
+    items.forEach(function (item) {
+      // Derive rendered height from intrinsic dimensions (no image-load wait)
+      var bwImg  = item.querySelector(".gallery-item__bw");
+      var natW   = bwImg ? parseInt(bwImg.getAttribute("width"),  10) : 0;
+      var natH   = bwImg ? parseInt(bwImg.getAttribute("height"), 10) : 0;
+
+      var itemH;
+      if (natW && natH) {
+        // Aspect-ratio height: colWidth * (H / W)
+        itemH = Math.round(colWidth * natH / natW);
+      } else if (item.classList.contains("gallery-item--missing")) {
+        itemH = Math.round(colWidth * 4 / 3); // fallback 3:4 ratio
+      } else {
+        itemH = item.offsetHeight || Math.round(colWidth * 4 / 3);
+      }
+
+      // Pick shortest column
+      var minH = Math.min.apply(null, colHeights);
+      var col  = colHeights.indexOf(minH);
+
+      // Set absolute position and size
+      item.style.position = "absolute";
+      item.style.width    = colWidth + "px";
+      item.style.left     = (col * (colWidth + GAP)) + "px";
+      item.style.top      = colHeights[col] + "px";
+
+      colHeights[col] += itemH + GAP;
+    });
+
+    // Expand the grid to the tallest column
+    var maxH = Math.max.apply(null, colHeights);
+    grid.style.height = (maxH > GAP ? maxH - GAP : maxH) + "px";
+  }
+
+  // Initial layout — runs synchronously (DOM + dimensions ready at script time)
+  layoutGallery();
+
+  // Re-layout on resize (debounced to 150 ms)
+  var resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layoutGallery, 150);
+  }, { passive: true });
+
   /* ── Lightbox ── */
   var lightbox         = document.getElementById("lightbox");
   var lightboxImg      = document.getElementById("lightboxImg");
